@@ -21,8 +21,8 @@ namespace registrar
 
         private void entrar ()
         {
-            string connect = "datasource=localhost;port=3306;username=root;password=;database=usuario";
-            string query = "SELECT *from datos where nombre =  '" +textBox1.Text + "' AND password = '" + contraseñaTextBox.Text + "' ";
+            string connect = "datasource=localhost;port=3306;username=root;password=;database=registrar";
+            string query = "SELECT *from datos where nombre =  '" +textBox1.Text + "' AND password = SHA1('" + contraseñaTextBox.Text + "')";
             MySqlConnection databaseConnection = new MySqlConnection(connect);
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
@@ -32,10 +32,13 @@ namespace registrar
             {
                 databaseConnection.Open();
                 reader = commandDatabase.ExecuteReader();
+                textBox1.Text = "";
+                contraseñaTextBox.Text = "";
 
                 if (reader.Read())
                 {
-                    MessageBox.Show("Bien benido al sistema del Hospital betel");
+                    MessageBox.Show("Bien benido al sistema del Hospital Betel");
+                    databaseConnection.Close();
                 }
                 else
                 {
@@ -61,7 +64,7 @@ namespace registrar
 
         private void entrarBt1_Click(object sender, EventArgs e)
         {
-            entrar();
+           entrar();
         }
 
         private void registrarBt2_Click(object sender, EventArgs e)
@@ -78,6 +81,76 @@ namespace registrar
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+
+FROM2
+
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+
+namespace registro1
+{
+    public partial class Form2 : Form
+    {
+        public Form2()
+        {
+            InitializeComponent();
+        }
+        private void registrar()
+        {
+            string connect = "datasource=localhost;port=3306;username=root;password=;database=registrar";
+            string query = "INSERT INTO datos (`id`,`nombre`) VALUES (NULL, '"+nombreTextBox2.Text+"'AND password =SHA1('"+contraseñaTextBox2.Text+"'))";
+            MySqlConnection databaseConnection = new MySqlConnection(connect);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+
+            try
+            {
+                
+                
+                databaseConnection.Open();
+                MySqlDataReader reader = commandDatabase.ExecuteReader();
+                MessageBox.Show("usuario registrado");
+                databaseConnection.Open();
+                reader = commandDatabase.ExecuteReader();
+                nombreTextBox2.Text = "";
+                contraseñaTextBox2.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void nombreTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contraseñaTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void registrarBt_Click(object sender, EventArgs e)
+        {
+            registrar();
         }
     }
 }
