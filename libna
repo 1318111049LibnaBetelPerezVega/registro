@@ -51,6 +51,39 @@ namespace registrar
                 MessageBox.Show(ex.Message);
             }
         }
+        
+        private void cerrar()
+        {
+            string connect = "datasource=localhost;port=3306;username=root;password=;database=registrar";
+            string query = "SELECT *from datos where nombre =  '" + textBox1.Text + "' AND password = SHA1('" + contraseñaTextBox.Text + "')";
+            MySqlConnection databaseConnection = new MySqlConnection(connect);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                databaseConnection.Open();
+                reader = commandDatabase.ExecuteReader();
+                textBox1.Text = "";
+                contraseñaTextBox.Text = "";
+
+                if (reader.Read())
+                {
+                   
+                    databaseConnection.Close();
+                }
+                else
+                {
+                    
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -86,6 +119,10 @@ namespace registrar
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cerrar();
         }
     }
 }
@@ -137,6 +174,36 @@ namespace registro1
             {
                 MessageBox.Show(ex.Message);
             }
+            private void cerrar()
+        {
+            string connect = "datasource=localhost;port=3306;username=root;password=;database=registrar";
+            string query = "INSERT INTO datos (`id`,`username`,`password`) VALUES (NULL, '" + nombreTextBox2.Text + "','" + contraseñaTextBox2.Text + "'))";
+            MySqlConnection databaseConnection = new MySqlConnection(connect);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+
+            try
+            {
+
+
+                databaseConnection.Open();
+                MySqlDataReader reader = commandDatabase.ExecuteReader();
+                MessageBox.Show("usuario registrado");
+                reader = commandDatabase.ExecuteReader();
+                nombreTextBox2.Text = "";
+                contraseñaTextBox2.Text = "";
+                if (reader.Read())
+                {
+                    MessageBox.Show("REGISTRO EXITOSO");
+                    databaseConnection.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         }
         private void nombreTextBox2_TextChanged(object sender, EventArgs e)
         {
@@ -151,6 +218,10 @@ namespace registro1
         private void registrarBt_Click(object sender, EventArgs e)
         {
             registrar();
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cerrar();
         }
     }
 }
